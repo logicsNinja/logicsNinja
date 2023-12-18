@@ -197,13 +197,13 @@ export const EventPage = () => {
 
       <Modal isOpen={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Edit Event</ModalHeader>
+        <ModalContent bg="gray.100">
+          <ModalHeader color="blue.500">Edit Event</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleEditSubmit}>
             <ModalBody>
               <FormControl isRequired>
-                <FormLabel>Title</FormLabel>
+                <FormLabel color="gray.500">Title</FormLabel>
                 <Input
                   name="title"
                   value={editFormData.title || ""}
@@ -211,7 +211,7 @@ export const EventPage = () => {
                 />
               </FormControl>
               <FormControl mt={4}>
-                <FormLabel>Description</FormLabel>
+                <FormLabel color="gray.500">Description</FormLabel>
                 <Input
                   name="description"
                   value={editFormData.description || ""}
@@ -219,7 +219,7 @@ export const EventPage = () => {
                 />
               </FormControl>
               <FormControl mt={4}>
-                <FormLabel>Image URL</FormLabel>
+                <FormLabel color="gray.500">Image URL</FormLabel>
                 <Input
                   name="image"
                   value={editFormData.image || ""}
@@ -227,7 +227,7 @@ export const EventPage = () => {
                 />
               </FormControl>
               <FormControl mt={4}>
-                <FormLabel>Start Time</FormLabel>
+                <FormLabel color="gray.500">Start Time</FormLabel>
                 <Input
                   name="startTime"
                   type="datetime-local"
@@ -236,7 +236,7 @@ export const EventPage = () => {
                 />
               </FormControl>
               <FormControl mt={4}>
-                <FormLabel>End Time</FormLabel>
+                <FormLabel color="gray.500">End Time</FormLabel>
                 <Input
                   name="endTime"
                   type="datetime-local"
@@ -260,10 +260,12 @@ export const EventPage = () => {
         onClose={() => setDeleteConfirmOpen(false)}
       >
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete Event</ModalHeader>
+        <ModalContent bg="gray.100">
+          <ModalHeader color="blue.500">Delete Event</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Are you sure you want to delete this event?</ModalBody>
+          <ModalBody color="gray.500">
+            Are you sure you want to delete this event?
+          </ModalBody>
           <ModalFooter>
             <Button colorScheme="red" mr={3} onClick={handleDelete}>
               Delete
