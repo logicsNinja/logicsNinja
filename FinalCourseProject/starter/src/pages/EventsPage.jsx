@@ -171,11 +171,13 @@ export const EventsPage = () => {
           value={searchQuery}
           onChange={handleSearchChange}
           width="300px"
+          size={{ base: "sm", md: "md" }}
           mr={2}
         />
         <Select
           bgColor="blue.500"
           color="primary.100"
+          size={{ base: "sm", md: "md" }}
           placeholder="Filter on category"
           onChange={handleFilterChange}
           width="300px"
@@ -193,6 +195,7 @@ export const EventsPage = () => {
         <Button
           bgColor="blue.500"
           color="white"
+          size={{ base: "sm", md: "md" }}
           _hover={{ bgColor: "blue.600" }}
           onClick={onOpen}
         >
@@ -258,38 +261,38 @@ export const EventsPage = () => {
       </Grid>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>New Event</ModalHeader>
+        <ModalContent bg="gray.100">
+          <ModalHeader color="blue.500">New Event</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleAddEvent}>
             <ModalBody pb={6}>
               <FormControl>
-                <FormLabel>Title</FormLabel>
+                <FormLabel color="gray.500">Title</FormLabel>
                 <Input name="title" type="text" required />
               </FormControl>
 
               <FormControl mt={4}>
-                <FormLabel>Description</FormLabel>
+                <FormLabel color="gray.500">Description</FormLabel>
                 <Input name="description" type="text" required />
               </FormControl>
 
               <FormControl mt={4}>
-                <FormLabel>Starttime</FormLabel>
+                <FormLabel color="gray.500">Starttime</FormLabel>
                 <Input name="startTime" type="datetime-local" required />
               </FormControl>
 
               <FormControl mt={4}>
-                <FormLabel>Endtime</FormLabel>
+                <FormLabel color="gray.500">Endtime</FormLabel>
                 <Input name="endTime" type="datetime-local" required />
               </FormControl>
 
               <FormControl mt={4}>
-                <FormLabel>Picture-URL</FormLabel>
+                <FormLabel color="gray.500">Picture-URL</FormLabel>
                 <Input name="image" type="url" required />
               </FormControl>
 
               <FormControl mt={4}>
-                <FormLabel>Category</FormLabel>
+                <FormLabel color="gray.500">Category</FormLabel>
                 <Select name="category" required>
                   <option value="2">Games</option>
                   <option value="3">Relaxen</option>
