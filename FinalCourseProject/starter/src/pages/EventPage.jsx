@@ -247,9 +247,14 @@ export const EventPage = () => {
             </ModalBody>
             <ModalFooter>
               <Button colorScheme="blue" mr={3} type="submit">
-                Save Changes
+                Save
               </Button>
-              <Button onClick={() => setEditModalOpen(false)}>Cancel</Button>
+              <Button
+                colorScheme="blue"
+                onClick={() => setEditModalOpen(false)}
+              >
+                Cancel
+              </Button>
             </ModalFooter>
           </form>
         </ModalContent>
@@ -270,7 +275,12 @@ export const EventPage = () => {
             <Button colorScheme="red" mr={3} onClick={handleDelete}>
               Delete
             </Button>
-            <Button onClick={() => setDeleteConfirmOpen(false)}>Cancel</Button>
+            <Button
+              colorScheme="blue"
+              onClick={() => setDeleteConfirmOpen(false)}
+            >
+              Cancel
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

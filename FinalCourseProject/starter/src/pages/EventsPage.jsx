@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FaCalendarAlt } from "react-icons/fa";
 import {
   Box,
   Icon,
-  useToast,
   Spinner,
   Heading,
   Grid,
@@ -24,8 +22,10 @@ import {
   FormControl,
   FormLabel,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { FaCalendarAlt } from "react-icons/fa";
 import { formatDate } from "../dateUtils";
 
 export const EventsPage = () => {
@@ -33,9 +33,9 @@ export const EventsPage = () => {
   const [categories, setCategories] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     setIsLoading(true);
@@ -70,52 +70,70 @@ export const EventsPage = () => {
     setFilterCategory(event.target.value);
   };
 
-  const handleAddEvent = (event) => {
+  const handleAddEvent = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const eventData = {
-      title: formData.get("title"),
-      description: formData.get("description"),
-      image: formData.get("image"),
-      startTime: formData.get("startTime"),
-      endTime: formData.get("endTime"),
-      categoryIds: [parseInt(formData.get("category"))],
+
+    const newUser = {
+      name: formData.get("creatorName"),
+      image: formData.get("creatorImage"),
     };
 
-    fetch("http://localhost:3000/events", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(eventData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setEvents([...events, data]);
-        onClose();
-        toast({
-          title: "Event added",
-          description: "Added event!",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        toast({
-          title: "Fault",
-          description: "Something went wrong. Event is not added",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
+    try {
+      const userResponse = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
       });
+
+      if (!userResponse.ok) {
+        throw new Error("Failed to create user");
+      }
+      const userData = await userResponse.json();
+
+      const newEvent = {
+        createdBy: userData.id,
+        title: formData.get("title"),
+        description: formData.get("description"),
+        image: formData.get("image"),
+        startTime: formData.get("startTime"),
+        endTime: formData.get("endTime"),
+        categoryIds: [parseInt(formData.get("category"))],
+      };
+
+      const eventResponse = await fetch("http://localhost:3000/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEvent),
+      });
+
+      if (!eventResponse.ok) {
+        throw new Error("Failed to create event");
+      }
+      const eventData = await eventResponse.json();
+      setEvents([...events, eventData]);
+      onClose();
+      toast({
+        title: "Event Added",
+        description: "The event has been successfully added.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem adding the event.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   const filteredEvents = events.filter((event) => {
@@ -162,6 +180,7 @@ export const EventsPage = () => {
       <Flex justifyContent="center" mb={4}>
         <Input
           bgColor="blue.500"
+          color="gray.100"
           placeholder="Search events"
           sx={{
             "::placeholder": {
@@ -176,7 +195,7 @@ export const EventsPage = () => {
         />
         <Select
           bgColor="blue.500"
-          color="primary.100"
+          color="gray.100"
           size={{ base: "sm", md: "md" }}
           placeholder="Filter on category"
           onChange={handleFilterChange}
@@ -295,16 +314,26 @@ export const EventsPage = () => {
                 <FormLabel color="gray.500">Category</FormLabel>
                 <Select name="category" required>
                   <option value="2">Games</option>
-                  <option value="3">Relaxen</option>
+                  <option value="3">Relaxation</option>
                   <option value="1">Sporten</option>
                 </Select>
+              </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>Creator Name</FormLabel>
+                <Input name="creatorName" type="text" required />
+              </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>Image URL Creator</FormLabel>
+                <Input name="creatorImage" type="url" required />
               </FormControl>
             </ModalBody>
             <ModalFooter>
               <Button colorScheme="blue" mr={3} type="submit">
                 Save
               </Button>
-              <Button onClick={onClose}>Close</Button>
+              <Button colorScheme="blue" onClick={onClose}>
+                Cancel
+              </Button>
             </ModalFooter>
           </form>
         </ModalContent>
